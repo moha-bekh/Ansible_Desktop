@@ -4,6 +4,25 @@
   become: true
 
   tasks:
-  - name: install neofetch
+  - name: install packages
     package:
-      name: neofetch
+      name:
+        - neofetch
+        - htop
+        - net-tools
+        - iproute2
+        - lf
+        - tree
+        - clang
+        - cmake
+        - git
+        - docker
+        - kubectl
+        - kubeadm
+        - kubelet
+        - valgrind
+        - tmux
+        - neovim
+        - firefox
+        - obsidian
+        - arduino-ide
