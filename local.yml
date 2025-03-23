@@ -61,12 +61,16 @@
         group: root
 
     - name: Create tmp dir for yay installation
+      become: yes
+      become_user:  "{{ USER }}"
       file:
         path: "/tmp/yay-install"
         state:  directory
         mode: '0755'
 
     - name: Clone yay repo
+      become: yes
+      become_user:  "{{ USER }}"
       git:
         repo: https://aur.archlinux.org/yay.git
         dest: /tmp/yay-install
@@ -74,12 +78,16 @@
         depth:  1
 
     - name: Build and install yay
+      become: yes
+      become_user:  "{{ USER }}"
       command:  makepkg -si --noconfirm
       args:
         chdir:  /tmp/yay-install
         creates:  /usr/bin/yay
 
     - name: Installer les packages AUR individuellement si nécessaire
+      become: yes
+      become_user:  "{{ USER }}"
       shell: |
         if ! command -v hyprshot &> /dev/null; then
           echo "installing hyprshot..."
