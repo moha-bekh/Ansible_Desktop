@@ -36,7 +36,6 @@
       owner:  root
       group:  root
       mode: 0440
-
   - name: add ansible-pull cron job
     user: sudoer_x
     minute: "*/10"
