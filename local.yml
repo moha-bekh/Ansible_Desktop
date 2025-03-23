@@ -32,6 +32,13 @@
         - blueman
         - pavucontrol
 
+  - name: add ansible-pull cron job
+    cron:
+      name: "ansible-pull"
+      minute: "*/10"
+      user: root
+      job: "/usr/bin/ansible-pull -o -U https://github.com/moha-bekh/Ansible_Desktop.git"
+
   - name: copy hyprland files
     copy:
       src:  files/hyprland
@@ -39,9 +46,10 @@
       owner:  moha
       group:  moha
 
-  - name: add ansible-pull cron job
-    cron:
-      name: "ansible-pull"
-      minute: "*/10"
-      user: root
-      job: "/usr/bin/ansible-pull -o -U https://github.com/moha-bekh/Ansible_Desktop.git"
+  - name: copy fonts
+    copy:
+      src:  files/fonts/*
+      dest: /usr/share/fonts
+      owner:  root
+      group:  root
+
