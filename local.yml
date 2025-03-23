@@ -9,8 +9,6 @@
       name:
         - neofetch
         - htop
-        - net-tools
-        - iproute2
         - lf
         - tree
         - clang
