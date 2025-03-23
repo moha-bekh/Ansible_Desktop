@@ -39,12 +39,22 @@
       user: root
       job: "/usr/bin/ansible-pull -o -U https://github.com/moha-bekh/Ansible_Desktop.git"
 
-  - name: copy hyprland files
+  define: &HOME "/home/moha"
+  define: &USER "moha"
+
+  - name: copy hyprland configurations files
     copy:
-      src:  files/hyprland/
-      dest: /home/moha/.config/hypr
-      owner:  moha
-      group:  moha
+      src:  files/hyprland.conf/
+      dest: *HOME/.config/hypr
+      owner:  *USER
+      group:  *USER
+
+  - name: copy hyprland additional pakcages
+    copy:
+      src:  files/hyprland.pkg/
+      dest: *HOME/.config/
+      owner:  *USER
+      group:  *USER
 
   - name: copy fonts
     copy:
