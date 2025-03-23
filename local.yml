@@ -2,8 +2,3 @@
 - hosts: localhost
   connection: local
   become: true
-
-  tasks:
-    - name: install neofetch
-    - package:
-        name: neofetch
