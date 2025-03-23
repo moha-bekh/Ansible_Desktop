@@ -11,6 +11,7 @@
         - htop
         - lf
         - tree
+        - cron
         - clang
         - cmake
         - git
@@ -21,6 +22,15 @@
         - firefox
         - obsidian
         - arduino-ide
+        - nautilus
+        - wofi
+        - waybar
+        - hyprpaper
+        - hyprlock
+        - swaync
+        - hypridle
+        - blueman
+        - pavucontrol
 
   - name: copy hyprland files
     copy:
@@ -34,4 +44,4 @@
       name: "ansible-pull"
       minute: "*/10"
       user: root
-      job: "/usr/bin/ansible-pull -U https://github.com/moha-bekh/Ansible_Desktop.git"
+      job: "/usr/bin/ansible-pull -o -U https://github.com/moha-bekh/Ansible_Desktop.git"
