@@ -25,9 +25,9 @@
   - name: copy hyprland files
     copy:
       src:  files/hyprland
-      dest: $HOME/.config/hypr
-      owner:  $USER
-      group:  $USER
+      dest: /home/moha/.config/hypr
+      owner:  moha
+      group:  moha
 
   - name: add ansible-pull cron job
     cron:
