@@ -29,14 +29,9 @@
       owner:  $USER
       group:  $USER
 
-  - name: set up sudo for ansible user
-    copy:
-      src:  files/sudoer_x
-      dest: /etc/sudoers.d/sudoer_x
-      owner:  root
-      group:  root
-      mode: 0440
   - name: add ansible-pull cron job
-    user: sudoer_x
-    minute: "*/10"
-    job: ansible-pull -o U https://github.com/moha-bekh/Ansible_Desktop.git
+    cron:
+      name: "ansible-pull"
+      minute: "*/10"
+      user: root
+      job: "/usr/bin/ansible-pull -U https://github.com/moha-bekh/Ansible_Desktop.git"
