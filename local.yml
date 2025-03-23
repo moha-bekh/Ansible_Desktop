@@ -28,8 +28,6 @@
           - wofi
           - waybar
           - hyprpaper
-          - hyprlock
-          - swaync
           - hypridle
           - blueman
           - pavucontrol
@@ -62,3 +60,40 @@
         owner: root
         group: root
 
+    - name: Create tmp dir for yay installation
+      file:
+        path: "/tmp/yay-install"
+        state:  directory
+        mode: '0755'
+
+    - name: Clone yay repo
+      git:
+        repo: https://aur.archlinux.org/yay.git
+        dest: /tmp/yay-install
+        clone:  yes
+        depth:  1
+
+    - name: Build and install yay
+      command:  makepkg -si --noconfirm
+      args:
+        chdir:  /tmp/yay-install
+        creates:  /usr/bin/yay
+
+    - name: Installer les packages AUR individuellement si nécessaire
+      shell: |
+        if ! command -v hyprshot &> /dev/null; then
+          echo "installing hyprshot..."
+          yay -S --noconfirm hyprshot
+        fi
+        
+        if ! command -v hyprlock &> /dev/null; then
+          echo "installing hyprlock..."
+          yay -S --noconfirm hyprlock
+        fi
+        
+        if ! command -v swaync &> /dev/null; then
+          echo "installing swaync..."
+          yay -S --noconfirm swaync
+        fi
+      register: install_result
+      changed_when: "'installing of' in install_result.stdout"
