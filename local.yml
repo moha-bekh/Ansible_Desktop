@@ -2,64 +2,63 @@
 - hosts: localhost
   connection: local
   become: true
-
+  vars:
+    HOME: "/home/moha"
+    USER: "moha"
   tasks:
-  - name: install packages
-    package:
-      name:
-        - neofetch
-        - htop
-        - lf
-        - tree
-        - cron
-        - clang
-        - cmake
-        - git
-        - docker
-        - valgrind
-        - tmux
-        - neovim
-        - firefox
-        - obsidian
-        - arduino-ide
-        - nautilus
-        - wofi
-        - waybar
-        - hyprpaper
-        - hyprlock
-        - swaync
-        - hypridle
-        - blueman
-        - pavucontrol
+    - name: install packages
+      package:
+        name:
+          - neofetch
+          - htop
+          - lf
+          - tree
+          - cron
+          - clang
+          - cmake
+          - git
+          - docker
+          - valgrind
+          - tmux
+          - neovim
+          - firefox
+          - obsidian
+          - arduino-ide
+          - nautilus
+          - wofi
+          - waybar
+          - hyprpaper
+          - hyprlock
+          - swaync
+          - hypridle
+          - blueman
+          - pavucontrol
 
-  - name: add ansible-pull cron job
-    cron:
-      name: "ansible-pull"
-      minute: "*/10"
-      user: root
-      job: "/usr/bin/ansible-pull -o -U https://github.com/moha-bekh/Ansible_Desktop.git"
+    - name: add ansible-pull cron job
+      cron:
+        name: "ansible-pull"
+        minute: "*/10"
+        user: root
+        job: "/usr/bin/ansible-pull -o -U https://github.com/moha-bekh/Ansible_Desktop.git"
 
-  define: &HOME "/home/moha"
-  define: &USER "moha"
+    - name: copy hyprland configurations files
+      copy:
+        src: files/hyprland.conf/
+        dest: "{{ HOME }}/.config/hypr"
+        owner: "{{ USER }}"
+        group: "{{ USER }}"
 
-  - name: copy hyprland configurations files
-    copy:
-      src:  files/hyprland.conf/
-      dest: *HOME/.config/hypr
-      owner:  *USER
-      group:  *USER
+    - name: copy hyprland additional packages
+      copy:
+        src: files/hyprland.pkg/
+        dest: "{{ HOME }}/.config/"
+        owner: "{{ USER }}"
+        group: "{{ USER }}"
 
-  - name: copy hyprland additional pakcages
-    copy:
-      src:  files/hyprland.pkg/
-      dest: *HOME/.config/
-      owner:  *USER
-      group:  *USER
-
-  - name: copy fonts
-    copy:
-      src:  files/fonts/
-      dest: /usr/share/fonts
-      owner:  root
-      group:  root
+    - name: copy fonts
+      copy:
+        src: files/fonts/
+        dest: /usr/share/fonts
+        owner: root
+        group: root
 
