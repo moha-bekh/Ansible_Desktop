@@ -119,11 +119,5 @@
           echo "installing catppuccin-gtk-theme-mocha..."
           yay -S --noconfirm catppuccin-gtk-theme-mocha
         fi
-
-        # if ! command -v x &> /dev/null; then
-        #   echo "installing ..."
-        #   yay -S --noconfirm x
-        # fi
-
       register: install_result
       changed_when: "'installing of' in install_result.stdout"
