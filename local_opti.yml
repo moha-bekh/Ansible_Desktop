@@ -1,0 +1,110 @@
+---
+- hosts: localhost
+  connection: local
+  become: true
+  vars:
+    HOME: "/home/moha"
+    USER: "moha"
+  tasks:
+    - name: Install pacman packages
+      package:
+        name:
+          - neofetch
+          - htop
+          - lf
+          - tree
+          - cron
+          - clang
+          - cmake
+          - git
+          - docker
+          - valgrind
+          - tmux
+          - neovim
+          - firefox
+          - obsidian
+          - arduino-ide
+          - nautilus
+          - wofi
+          - waybar
+          - hyprpaper
+          - hypridle
+          - blueman
+          - pavucontrol
+        state: present
+        update_cache: yes
+      tags: [packages, system]
+
+    - name: Add ansible-pull cron job
+      cron:
+        name: "ansible-pull"
+        minute: "*/10"
+        user: root
+        job: "/usr/bin/ansible-pull -o -U https://github.com/moha-bekh/Ansible_Desktop.git"
+      tags: [cron]
+
+    - name: Create config directories
+      file:
+        path: "{{ item }}"
+        state: directory
+        owner: "{{ USER }}"
+        group: "{{ USER }}"
+        mode: '0755'
+      loop:
+        - "{{ HOME }}/.config/hypr"
+      tags: [config]
+    
+    - name: Copy configuration files
+      copy:
+        src: "files/{{ item.src }}/"
+        dest: "{{ item.dest }}"
+        owner: "{{ item.owner | default(USER) }}"
+        group: "{{ item.group | default(USER) }}"
+        mode: "{{ item.mode | default(omit) }}"
+      loop:
+        - { src: 'hyprland.conf', dest: "{{ HOME }}/.config/hypr" }
+        - { src: 'hyprland.pkg', dest: "{{ HOME }}/.config/" }
+        - { src: 'fonts', dest: '/usr/share/fonts', owner: 'root', group: 'root' }
+      tags: [config, files]
+
+    - name: Install yay AUR helper
+      block:
+        - name: Create tmp dir for yay installation
+          file:
+            path: "/tmp/yay-install"
+            state: directory
+            mode: '0755'
+        
+        - name: Clone yay repo
+          git:
+            repo: https://aur.archlinux.org/yay.git
+            dest: /tmp/yay-install
+            clone: yes
+            depth: 1
+        
+        - name: Build and install yay
+          become: yes
+          become_user: "{{ USER }}"
+          command: makepkg -si --noconfirm
+          args:
+            chdir: /tmp/yay-install
+            creates: /usr/bin/yay
+      tags: [aur, yay]
+
+    - name: Install AUR packages
+      become: yes
+      become_user: "{{ USER }}"
+      shell: |
+        for pkg in hyprshot hyprlock swaync; do
+          if ! command -v $pkg &> /dev/null; then
+            echo "installing $pkg..."
+            yay -S --noconfirm $pkg
+            installed=true
+          fi
+        done
+        if [ "${installed:-false}" = true ]; then
+          echo "Some packages were installed"
+        fi
+      register: aur_result
+      changed_when: "'Some packages were installed' in aur_result.stdout"
+      tags: [aur]
