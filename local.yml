@@ -88,36 +88,33 @@
         chdir:  /tmp/yay-install
         creates:  /usr/bin/yay
 
+    - name: install hyprlock
+      ansible.builtin.command: yay -S --noconfirm hyprlock
+      args:
+        creates: /usr/bin/hyprlock
+
+    - name: install hyprlock
+      ansible.builtin.command: yay -S --noconfirm hyprlock
+      args:
+        creates: /usr/bin/hyprlock
+
+    - name: install hyprshot
+      ansible.builtin.command: yay -S --noconfirm hyprshot
+      args:
+        creates: /usr/bin/hyprshot
+
+    - name: install swaync
+      ansible.builtin.command: yay -S --noconfirm swaync
+      args:
+        creates: /usr/bin/swaync
+
     - name: Install yay packages
       shell: |
-        if ! command -v hyprshot &> /dev/null; then
-          echo "installing hyprshot..."
-          yay -S --noconfirm hyprshot
-        fi
-        
-        if ! command -v hyprlock &> /dev/null; then
-          echo "installing hyprlock..."
-          yay -S --noconfirm hyprlock
-        fi
-        
-        if ! command -v swaync &> /dev/null; then
-          echo "installing swaync..."
-          yay -S --noconfirm swaync
-        fi
-
-        if ! command -v ttf-cascadia-code-nerd &> /dev/null; then
           echo "installing Cascadia code nerd..."
-          yay -S --noconfirm ttf-cascadia-code-nerd
-        fi
-
-        if ! command -v nwg-look &> /dev/null; then
+          yay -Sy --noconfirm ttf-cascadia-code-nerd
           echo "installing nwg-look..."
-          yay -S --noconfirm nwg-look
-        fi
-
-        if ! command -v catppuccin-gtk-theme-mocha &> /dev/null; then
+          yay -Sy --noconfirm nwg-look
           echo "installing catppuccin-gtk-theme-mocha..."
-          yay -S --noconfirm catppuccin-gtk-theme-mocha
-        fi
+          yay -Sy --noconfirm catppuccin-gtk-theme-mocha
       register: install_result
       changed_when: "'installing of' in install_result.stdout"
