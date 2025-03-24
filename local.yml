@@ -39,6 +39,13 @@
         user: root
         job: "/usr/bin/ansible-pull -o -U https://github.com/moha-bekh/Ansible_Desktop.git"
 
+    - name: copy bashrc
+      copy:
+        src: files/bashrc/
+        dest: "{{ HOME }}/"
+        owner: "{{ USER }}"
+        group: "{{ USER }}"
+
     - name: copy hyprland configurations files
       copy:
         src: files/hyprland.conf/
@@ -97,5 +104,26 @@
           echo "installing swaync..."
           yay -S --noconfirm swaync
         fi
+
+        if ! command -v ttf-cascadia-code-nerd &> /dev/null; then
+          echo "installing Cascadia code nerd..."
+          yay -S --noconfirm ttf-cascadia-code-nerd
+        fi
+
+        if ! command -v nwg-look &> /dev/null; then
+          echo "installing nwg-look..."
+          yay -S --noconfirm nwg-look
+        fi
+
+        if ! command -v catppuccin-gtk-theme-mocha &> /dev/null; then
+          echo "installing catppuccin-gtk-theme-mocha..."
+          yay -S --noconfirm catppuccin-gtk-theme-mocha
+        fi
+
+        # if ! command -v x &> /dev/null; then
+        #   echo "installing ..."
+        #   yay -S --noconfirm x
+        # fi
+
       register: install_result
       changed_when: "'installing of' in install_result.stdout"
