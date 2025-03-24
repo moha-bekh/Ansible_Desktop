@@ -114,7 +114,5 @@
           yay -Sy --noconfirm ttf-cascadia-code-nerd
           echo "installing nwg-look..."
           yay -Sy --noconfirm nwg-look
-          echo "installing catppuccin-gtk-theme-mocha..."
-          yay -Sy --noconfirm catppuccin-gtk-theme-mocha
       register: install_result
       changed_when: "'installing of' in install_result.stdout"
